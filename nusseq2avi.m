@@ -1,11 +1,10 @@
 function nusseq2avi(optsdataset)
 
-addpath(genpath('toolbox'));
 actions = dir(optsdataset.seqdata);
 actions(1:2) = [];
 sz = [240 NaN];
 
-for i=11%1:length(actions)
+for i=1:length(actions)
     
     if(~exist([optsdataset.folder '/' actions(i).name],'dir'))
         mkdir([optsdataset.folder '/' actions(i).name])
@@ -41,7 +40,8 @@ Is = seqIo(seqfilename, 'toImgs', tempdir);
 myObj = VideoWriter(filename);
 myObj.FrameRate = info.fps;
 open(myObj)
-list = dir(fullfile(tempdir,'*.png'));
+list = dir(fullfile(tempdir,'*.*'));
+list = list(~ismember({list.name}, {'.','..'}));
 for j=1:info.numFrames
     Img = imread(fullfile(tempdir,list(j).name));
     I = imresize(Img,sz,'nearest');
